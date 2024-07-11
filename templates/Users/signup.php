@@ -176,6 +176,11 @@ a.google span{
     }
     
 }
+
+.top-nav-links{
+    display: none !important;
+}
+
 </style>
 <div class="row">
     <div class="column column-80">
@@ -206,6 +211,7 @@ a.google span{
                            
                         </div>
                     <?= $this->Form->end() ?>
+                    <!--
                     <div class="form-link">
                         <span>Already have an account? <?= $this->Html->link(__('Log In'), ['action' => 'login'], ['class' => 'link login-link']) ?></span>
                         
@@ -222,6 +228,7 @@ a.google span{
                         <span>Login with Google</span>
                     </a>
                 </div>
+                -->
             </div>
         </section>
 

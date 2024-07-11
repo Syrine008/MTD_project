@@ -18,6 +18,9 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 
+
+
+
 /**
  * Application Controller
  *
@@ -41,7 +44,12 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('Flash');
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Flash');        
+        $this->loadComponent('Authorization.Authorization');
+        $this->loadComponent('Authentication.Authentication');
+        $this->Authentication->allowUnauthenticated(['view', 'index']);
+        $this->Authorization->skipAuthorization(); 
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.

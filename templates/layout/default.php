@@ -19,6 +19,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        .my-logo-class {
+            width: 150px; /* Adjust the width as needed */
+            height: auto; /* Maintain the aspect ratio */
+}
+    </style>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
@@ -40,11 +46,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>PHP</a>
+            <a href="<?= $this->Url->build('/') ?>"><!--<span>Gestion de references</span>--></a>
+            <!--<img src="webroot/img/logo-mtd+2at.png" alt="Logo application"> -->
+            <?= $this->Html->image('logo-mtd+2at.png', ['alt' => 'My Logo', 'class' => 'my-logo-class']) ?>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
-            <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
+            <!--<a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
+            <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a> -->
+            <?php echo  $this->Html->link('Logout', ['controller' => 'Users', 'action' =>'logout']);?>
         </div>
     </nav>
     <main class="main">

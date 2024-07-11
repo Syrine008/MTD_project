@@ -19,6 +19,10 @@
             <h3><?= h($user->email) ?></h3>
             <table>
                 <tr>
+                    <th><?= __('Id') ?></th>
+                    <td><?= $this->Number->format($user->id) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Email') ?></th>
                     <td><?= h($user->email) ?></td>
                 </tr>
@@ -26,10 +30,7 @@
                     <th><?= __('Phone') ?></th>
                     <td><?= h($user->phone) ?></td>
                 </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($user->id) ?></td>
-                </tr>
+                
                 <tr>
                     <th><?= __('Created') ?></th>
                     <td><?= h($user->created) ?></td>

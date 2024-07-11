@@ -58,18 +58,36 @@ class UsersController extends AppController
 
     public function login()
     {
-        if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if ($user) {
-                $this->Auth->setUser($user);
-                $this->Flash->success(__('You are now logged in.'));
-                return $this->redirect($this->Auth->redirectUrl());
-            }
-            $this->Flash->error(__('Invalid username or password, try again.'));
+        $result = $this->Authentication->getResult();
+    
+        // If the user is already logged in, redirect them to another page (e.g., Reference index).
+        if ($result->isValid()) {
+            return $this->redirect(['controller' => 'Reference', 'action' => 'index']);
         }
+    
+        // If it's a POST request and login credentials are invalid, show an error message.
+        if ($this->request->is('post') && !$result->isValid()) {
+            $this->Flash->error('Invalid username or password');
+        }
+    
+        // Set the logged-in user's identity to the view.
+        $this->set('user', $this->Authentication->getIdentity());
     }
+    
+public function beforeFilter(\Cake\Event\EventInterface $event)
+{
+    parent::beforeFilter($event);
 
-    public function signup()
+    $this->Authentication->allowUnauthenticated(['login']);
+}
+
+public function logout()
+{
+    $this->Authentication->logout();
+    return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+}
+
+public function signup()
     {
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
@@ -125,4 +143,51 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    public function forgotpassword()
+{
+if ($this->request->is('post')) {
+		$email = $this->request->getData('email');
+		$token = Security::hash(Security::randomBytes(25));
+		
+		$userTable = TableRegistry::get('Users');
+			if ($email == NULL) {
+				$this->Flash->error(__('Please insert your email address')); 
+			} 
+			if	($user = $userTable->find('all')->where(['email'=>$email])->first()) { 
+				$user->token = $token;
+				if ($userTable->save($user)){
+					$mailer = new Mailer('default');
+					$mailer->setTransport('smtp');
+					$mailer->setFrom(['noreply[at]codethepixel.com' => 'myCake4'])
+					->setTo($email)
+					->setEmailFormat('html')
+					->setSubject('Forgot Password Request')
+					->deliver('Hello<br/>Please click link below to reset your password<br/><br/><a href="http://localhost/myCake4/users/resetpassword/'.$token.'">Reset Password</a>');
+				}
+				$this->Flash->success('Reset password link has been sent to your email ('.$email.'), please check your email');
+			}
+			if	($total = $userTable->find('all')->where(['email'=>$email])->count()==0) {
+				$this->Flash->error(__('Email is not registered in system'));
+			}
+	}
+}
+
+public function resetpassword($token)
+{
+	if($this->request->is('post')){
+		$hasher = new DefaultPasswordHasher();
+		$newPass = $hasher->hash($this->request->getData('password'));
+
+		$userTable = TableRegistry::get('Users');
+		$user = $userTable->find('all')->where(['token'=>$token])->first();
+		$user->password = $newPass;
+		if ($userTable->save($user)) {
+			$this->Flash->success('Password successfully reset. Please login using your new password');
+			return $this->redirect(['action'=>'login']);
+		}
+	}
+}
+
 }
