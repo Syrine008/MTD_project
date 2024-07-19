@@ -47,11 +47,11 @@ class SecteurController extends AppController
         if ($this->request->is('post')) {
             $secteur = $this->Secteur->patchEntity($secteur, $this->request->getData());
             if ($this->Secteur->save($secteur)) {
-                $this->Flash->success(__('The secteur has been saved.'));
+                $this->Flash->success(__('The sector has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The secteur could not be saved. Please, try again.'));
+            $this->Flash->error(__('The sector could not be saved. Please, try again.'));
         }
         $this->set(compact('secteur'));
     }
@@ -69,11 +69,11 @@ class SecteurController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $secteur = $this->Secteur->patchEntity($secteur, $this->request->getData());
             if ($this->Secteur->save($secteur)) {
-                $this->Flash->success(__('The secteur has been saved.'));
+                $this->Flash->success(__('The sector has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The secteur could not be saved. Please, try again.'));
+            $this->Flash->error(__('The sector could not be saved. Please, try again.'));
         }
         $this->set(compact('secteur'));
     }
@@ -89,12 +89,28 @@ class SecteurController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $secteur = $this->Secteur->get($id);
+
+        if ($this->isSecteurReferenced($id)) {
+            $this->Flash->error(__('The Sector cannot be deleted because it is referenced in the reference table.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         if ($this->Secteur->delete($secteur)) {
-            $this->Flash->success(__('The secteur has been deleted.'));
+            $this->Flash->success(__('The Sector has been deleted.'));
         } else {
-            $this->Flash->error(__('The secteur could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The Sector could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
     }
+
+    private function isSecteurReferenced($SecteurId)
+{
+    $referenceTable = $this->getTableLocator()->get('Reference');
+    $referenceCount = $referenceTable->find()
+        ->where(['Reference.id_secteur' => $SecteurId])
+        ->count();
+
+    return $referenceCount > 0;
+}
 }

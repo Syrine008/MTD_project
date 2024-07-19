@@ -85,7 +85,7 @@ class ClientController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    /* public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $client = $this->Client->get($id);
@@ -96,5 +96,35 @@ class ClientController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    } */
+
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $client = $this->Client->get($id);
+
+        // Check if the client exists in the reference table
+        if ($this->isClientReferenced($id)) {
+            $this->Flash->error(__('The client cannot be deleted because it is referenced in the reference table.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ($this->Client->delete($client)) {
+            $this->Flash->success(__('The client has been deleted.'));
+        } else {
+            $this->Flash->error(__('The client could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
     }
+
+    private function isClientReferenced($clientId)
+{
+    $referenceTable = $this->getTableLocator()->get('Reference');
+    $referenceCount = $referenceTable->find()
+        ->where(['Reference.id_client' => $clientId])
+        ->count();
+
+    return $referenceCount > 0;
+}
 }

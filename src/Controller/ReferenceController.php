@@ -18,13 +18,36 @@ class ReferenceController extends AppController
 
     public function index()
     {
-        $query = $this->Reference->find()
+         $query = $this->Reference->find()
         ->contain(['Client', 'Societe', 'Secteur', 'Annee', 'Pays', 'Type']);
     
         // Pass the query object to paginate()
         $reference = $this->paginate($query);
 
-        $this->set(compact('reference'));
+        $this->set(compact('reference')); 
+
+
+// une méthode pour faire une recherche en utilisant une barre de recherche 
+
+        /* $key = $this->request->getQuery('key');
+        if($key){
+            $query = $this->Reference->find('all', [
+                'contain' => ['Client', 'Societe', 'Secteur', 'Annee', 'Pays', 'Type']
+            ])->where(['OR' => [
+                'Client.name LIKE' => '%' . $key . '%',
+                'Societe.name LIKE' => '%' . $key . '%',
+                'Secteur.name LIKE' => '%' . $key . '%',
+                'Annee.name LIKE' => '%' . $key . '%',
+                'Pays.name LIKE' => '%' . $key . '%',
+                'Type.name LIKE' => '%' . $key . '%',
+                'Reference.name LIKE' => '%' . $key . '%']
+            ]);
+        }else{
+            $query=$this->Reference;
+        }
+
+        $reference = $this->paginate($query);
+        $this->set(compact('reference')); */
     }
 
     /**
@@ -53,9 +76,13 @@ class ReferenceController extends AppController
     {
         $reference = $this->Reference->newEmptyEntity();
         if ($this->request->is('post')) {
+                      
 
+
+            $reference = $this->Reference->patchEntity($reference,$this->request->getData());
                    // Handle file upload
         $image = $this->request->getUploadedFile('logo');
+       // debug($image);die;
         
         if ($image && $image->getError() === UPLOAD_ERR_OK) {
             $name = $image->getClientFilename();
@@ -66,15 +93,16 @@ class ReferenceController extends AppController
     
             // Save the filename to the reference entity
             $reference->logo = 'uploads' . DS . $name;
-        }
-            debug($reference);die;
-            $reference = $this->Reference->patchEntity($reference,$this->request->getData());
+            
+        } // debug($this->request->getData());//die;
+          //  debug($reference);die;
+         
             if ($this->Reference->save($reference)) {
                 $this->Flash->success(__('The reference has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            debug($reference->getErrors());die;
+            //debug($reference->getErrors());die;
             $this->Flash->error(__('The reference could not be saved. Please, try again.'));
         }
          // Fetch related data from other tables for dropdowns
@@ -99,14 +127,35 @@ class ReferenceController extends AppController
     {
         $reference = $this->Reference->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $reference = $this->Reference->patchEntity($reference, $this->request->getData());
+            
+            $reference = $this->Reference->patchEntity($reference,$this->request->getData());
+                   // Handle file upload
+        $image = $this->request->getUploadedFile('logo');
+       // debug($image);die;
+        
+        if ($image && $image->getError() === UPLOAD_ERR_OK) {
+            $name = $image->getClientFilename();
+    
+            // Additional code to handle the uploaded file, such as moving it to a directory
+            $targetPath = WWW_ROOT . 'img' . DS . 'uploads' . DS . $name;
+            $image->moveTo($targetPath);
+    
+            // Save the filename to the reference entity
+            $reference->logo = 'uploads' . DS . $name;
+            
+        } // debug($this->request->getData());//die;
+          //  debug($reference);die;
+         
             if ($this->Reference->save($reference)) {
                 $this->Flash->success(__('The reference has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
+            //debug($reference->getErrors());die;
             $this->Flash->error(__('The reference could not be saved. Please, try again.'));
+        
         }
+        
         // Fetch related data from other tables
         $client = $this->Reference->Client->find('list', ['limit' => 200]);
         $societe = $this->Reference->Societe->find('list', ['limit' => 200]);
@@ -137,4 +186,55 @@ class ReferenceController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    public function search()
+    {
+
+        $query = $this->Reference->find('all', [
+            'contain' => ['Client', 'Societe', 'Secteur', 'Annee', 'Pays', 'Type']
+        ]);
+
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+
+            if (!empty($data['id_client'])) {
+                $query->matching('Client', function ($q) use ($data) {
+                    return $q->where(['Client.name LIKE' => '%' . $data['id_client'] . '%']);
+                });
+            }
+
+            if (!empty($data['id_societe'])) {
+                $query->matching('Societe', function ($q) use ($data) {
+                    return $q->where(['Societe.name LIKE' => '%' . $data['id_societe'] . '%']);
+                });
+            }
+            if (!empty($data['id_secteur'])) {
+                $query->matching('Secteur', function ($q) use ($data) {
+                    return $q->where(['Secteur.name LIKE' => '%' . $data['id_secteur'] . '%']);
+                });
+            }
+            if (!empty($data['id_annee'])) {
+                $query->matching('Annee', function ($q) use ($data) {
+                    return $q->where(['Annee.name LIKE' => '%' . $data['id_annee'] . '%']);
+                });
+            }
+            if (!empty($data['id_pays'])) {
+                $query->matching('Pays', function ($q) use ($data) {
+                    return $q->where(['Pays.name LIKE' => '%' . $data['id_pays'] . '%']);
+                });
+            }
+            if (!empty($data['id_type'])) {
+                $query->matching('Type', function ($q) use ($data) {
+                    return $q->where(['Type.name LIKE' => '%' . $data['id_type'] . '%']);
+                });
+            }
+        }
+
+        $this->set('reference', $this->paginate($query));
+    }
+    
+    
+
+
 }

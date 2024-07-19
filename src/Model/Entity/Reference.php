@@ -5,6 +5,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
+
 /**
  * Reference Entity
  *
@@ -39,4 +40,6 @@ class Reference extends Entity
         'id_societe' => true,
         'id_type' => true,
     ];
+
+    
 }

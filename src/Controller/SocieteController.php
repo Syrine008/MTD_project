@@ -47,11 +47,11 @@ class SocieteController extends AppController
         if ($this->request->is('post')) {
             $societe = $this->Societe->patchEntity($societe, $this->request->getData());
             if ($this->Societe->save($societe)) {
-                $this->Flash->success(__('The societe has been saved.'));
+                $this->Flash->success(__('The company has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The societe could not be saved. Please, try again.'));
+            $this->Flash->error(__('The company could not be saved. Please, try again.'));
         }
         $this->set(compact('societe'));
     }
@@ -69,11 +69,11 @@ class SocieteController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $societe = $this->Societe->patchEntity($societe, $this->request->getData());
             if ($this->Societe->save($societe)) {
-                $this->Flash->success(__('The societe has been saved.'));
+                $this->Flash->success(__('The company has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The societe could not be saved. Please, try again.'));
+            $this->Flash->error(__('The company could not be saved. Please, try again.'));
         }
         $this->set(compact('societe'));
     }
@@ -89,12 +89,28 @@ class SocieteController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $societe = $this->Societe->get($id);
+
+        if ($this->isSocieteReferenced($id)) {
+            $this->Flash->error(__('The Company cannot be deleted because it is referenced in the reference table.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         if ($this->Societe->delete($societe)) {
-            $this->Flash->success(__('The societe has been deleted.'));
+            $this->Flash->success(__('The Company has been deleted.'));
         } else {
-            $this->Flash->error(__('The societe could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The Company could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
     }
+
+    private function isSocieteReferenced($SocieteId)
+{
+    $referenceTable = $this->getTableLocator()->get('Reference');
+    $referenceCount = $referenceTable->find()
+        ->where(['Reference.id_societe' => $SocieteId])
+        ->count();
+
+    return $referenceCount > 0;
+}
 }

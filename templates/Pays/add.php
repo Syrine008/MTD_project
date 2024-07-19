@@ -1,21 +1,21 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Pay $pay
+ * @var \Cake\Datasource\EntityInterface $pay
  */
 ?>
 <div class="row">
-    <aside class="column">
+    <!-- <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List of countries'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('List of Countries'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
-    </aside>
+    </aside> -->
     <div class="column column-80">
         <div class="pays form content">
-            <?= $this->Form->create($pay) ?>
+            <?= $this->Form->create($pays) ?>
             <fieldset>
-                <legend><?= __('Add country') ?></legend>
+                <legend><?= __('Add Country') ?></legend>
                 <?php
                     echo $this->Form->control('name');
                 ?>

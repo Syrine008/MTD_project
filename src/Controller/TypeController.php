@@ -89,12 +89,28 @@ class TypeController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $type = $this->Type->get($id);
+
+        if ($this->isTypeReferenced($id)) {
+            $this->Flash->error(__('The Type cannot be deleted because it is referenced in the reference table.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         if ($this->Type->delete($type)) {
-            $this->Flash->success(__('The type has been deleted.'));
+            $this->Flash->success(__('The Type has been deleted.'));
         } else {
-            $this->Flash->error(__('The type could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The Type could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
     }
+
+    private function isTypeReferenced($TypeId)
+{
+    $referenceTable = $this->getTableLocator()->get('Reference');
+    $referenceCount = $referenceTable->find()
+        ->where(['Reference.id_type' => $TypeId])
+        ->count();
+
+    return $referenceCount > 0;
+}
 }

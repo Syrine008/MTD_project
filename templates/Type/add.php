@@ -5,12 +5,12 @@
  */
 ?>
 <div class="row">
-    <aside class="column">
+    <!-- <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Type'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('List of Types'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
-    </aside>
+    </aside> -->
     <div class="column column-80">
         <div class="type form content">
             <?= $this->Form->create($type) ?>

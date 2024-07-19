@@ -5,15 +5,16 @@
  */
 ?>
 <div class="row">
-    <aside class="column">
+    <!-- <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Company'), ['action' => 'edit', $societe->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Company'), ['action' => 'delete', $societe->id], ['confirm' => __('Are you sure you want to delete # {0}?', $societe->id), 'class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('List of Companies'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('New Company'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('Edit Company'), ['action' => 'edit', $societe->id], ['class' => 'side-nav-item']) ?>
+            <?= $this->Form->postLink(__('Delete Company'), ['action' => 'delete', $societe->id], ['confirm' => __('Are you sure you want to delete # {0}?', $societe->id), 'class' => 'side-nav-item']) ?>
+            
         </div>
-    </aside>
+    </aside> -->
     <div class="column column-80">
         <div class="societe view content">
             <h3><?= h($societe->name) ?></h3>

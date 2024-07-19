@@ -6,6 +6,7 @@ namespace App\Model\Table;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\Query;
 use Cake\Validation\Validator;
 
 /**
@@ -130,4 +131,7 @@ class ReferenceTable extends Table
         ]]);
         return $validator;
     } 
+
+
+    
 }

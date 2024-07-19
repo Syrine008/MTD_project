@@ -5,15 +5,16 @@
  */
 ?>
 <div class="row">
-    <aside class="column">
+    <!-- <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
+            <?= $this->Html->link(__('List of References'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('New Reference'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('Edit Reference'), ['action' => 'edit', $reference->id], ['class' => 'side-nav-item']) ?>
             <?= $this->Form->postLink(__('Delete Reference'), ['action' => 'delete', $reference->id], ['confirm' => __('Are you sure you want to delete # {0}?', $reference->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Reference'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New Reference'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            
         </div>
-    </aside>
+    </aside> -->
     <div class="column column-80">
         <div class="references view content">
         <h3><?= h($reference->name) ?></h3>
@@ -31,20 +32,20 @@
                 <td><?= $reference->has('client') ? $this->Html->link($reference->client->name, ['controller' => 'Client', 'action' => 'view', $reference->client->id]) : '' ?></td>
             </tr>
             <tr>
-                <th><?= __('Societe') ?></th>
+                <th><?= __('Company') ?></th>
                 <td><?= $reference->has('societe') ? $this->Html->link($reference->societe->name, ['controller' => 'Societe', 'action' => 'view', $reference->societe->id]) : '' ?></td>
             </tr>
             <tr>
-                <th><?= __('Secteur') ?></th>
+                <th><?= __('Sector') ?></th>
                 <td><?= $reference->has('secteur') ? $this->Html->link($reference->secteur->name, ['controller' => 'Secteur', 'action' => 'view', $reference->secteur->id]) : '' ?></td>
             </tr>
             <tr>
-                <th><?= __('Annee') ?></th>
+                <th><?= __('Year') ?></th>
                 <td><?= $reference->has('annee') ? $this->Html->link($reference->annee->name, ['controller' => 'Annee', 'action' => 'view', $reference->annee->id]) : '' ?></td>
             </tr>
             <tr>
-                <th><?= __('Pays') ?></th>
-                <td><?= $reference->has('pays') ? $this->Html->link($reference->pays->name, ['controller' => 'Pays', 'action' => 'view', $reference->pays->id]) : '' ?></td>
+                <th><?= __('Country') ?></th>
+                <td><?= $reference->pay['name']?></td>
             </tr>
             <tr>
                 <th><?= __('Type') ?></th>

@@ -47,11 +47,11 @@ class AnneeController extends AppController
         if ($this->request->is('post')) {
             $annee = $this->Annee->patchEntity($annee, $this->request->getData());
             if ($this->Annee->save($annee)) {
-                $this->Flash->success(__('The annee has been saved.'));
+                $this->Flash->success(__('The year has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The annee could not be saved. Please, try again.'));
+            $this->Flash->error(__('The year could not be saved. Please, try again.'));
         }
         $this->set(compact('annee'));
     }
@@ -69,11 +69,11 @@ class AnneeController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $annee = $this->Annee->patchEntity($annee, $this->request->getData());
             if ($this->Annee->save($annee)) {
-                $this->Flash->success(__('The annee has been saved.'));
+                $this->Flash->success(__('The year has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The annee could not be saved. Please, try again.'));
+            $this->Flash->error(__('The year could not be saved. Please, try again.'));
         }
         $this->set(compact('annee'));
     }
@@ -89,12 +89,28 @@ class AnneeController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $annee = $this->Annee->get($id);
+
+        if ($this->isAnneeReferenced($id)) {
+            $this->Flash->error(__('The Year cannot be deleted because it is referenced in the reference table.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         if ($this->Annee->delete($annee)) {
-            $this->Flash->success(__('The annee has been deleted.'));
+            $this->Flash->success(__('The Year has been deleted.'));
         } else {
-            $this->Flash->error(__('The annee could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The Year could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
     }
+
+    private function isAnneeReferenced($AnneeId)
+{
+    $referenceTable = $this->getTableLocator()->get('Reference');
+    $referenceCount = $referenceTable->find()
+        ->where(['Reference.id_annee' => $AnneeId])
+        ->count();
+
+    return $referenceCount > 0;
+}
 }
