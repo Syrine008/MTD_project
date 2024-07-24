@@ -39,6 +39,8 @@ class Reference extends Entity
         'id_secteur' => true,
         'id_societe' => true,
         'id_type' => true,
+        'link' => true,
+
     ];
 
     

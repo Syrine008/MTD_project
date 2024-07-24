@@ -122,7 +122,13 @@ class Initial extends AbstractMigration
                 'null' => true,
                 'signed' => true,
             ])
+            ->addColumn('link', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
             ->create();
+            
 
         $this->table('secteur', ['id' => false, 'primary_key' => ['id_secteur']])
             ->addColumn('id_secteur', 'integer', [

@@ -407,4 +407,35 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+
+/* 'CakePdf' => [
+    'engine' => [
+        'className' => 'CakePdf.DomPdf', // or 'CakePdf.WkHtmlToPdf'
+        'options' => [
+            'print-media-type' => false,
+            'outline' => true,
+            'dpi' => 96
+        ]
+    ],
+    'margin' => [
+        'bottom' => 15,
+        'left' => 50,
+        'right' => 30,
+        'top' => 45
+    ],
+    'orientation' => 'portrait',
+    'download' => true
+    ],
+ */
+'CakePdf' => [
+    'engine' => 'CakePdf\Pdf\Engine\DomPdfEngine', // Vous pouvez choisir un autre moteur
+    'options' => [
+        'print-media-type' => false,
+        'images' => true,
+        'isHtml5ParserEnabled' => true,
+    ],
+    'download' => true
+],
+
+
 ];

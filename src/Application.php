@@ -36,6 +36,8 @@ class Application extends BaseApplication implements AuthorizationServiceProvide
 
         $this->addPlugin('Authentication');
         $this->addPlugin('Authorization');
+        $this->addPlugin('CakePdf');
+
 
         if (PHP_SAPI !== 'cli') {
             FactoryLocator::add(

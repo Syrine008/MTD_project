@@ -2,6 +2,9 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use CakePdf\Pdf\CakePdf;
+
+
 
 /**
  * Reference Controller
@@ -187,54 +190,93 @@ class ReferenceController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    // une méthode pour faire une état
 
     public function search()
-    {
+{
+    $query = $this->Reference->find('all', [
+        'contain' => ['Client', 'Societe', 'Secteur', 'Annee', 'Pays', 'Type']
+    ]);
 
-        $query = $this->Reference->find('all', [
-            'contain' => ['Client', 'Societe', 'Secteur', 'Annee', 'Pays', 'Type']
-        ]);
+    if ($this->request->is('post')) {
+        $data = $this->request->getData();
 
-        if ($this->request->is('post')) {
-            $data = $this->request->getData();
-
-            if (!empty($data['id_client'])) {
-                $query->matching('Client', function ($q) use ($data) {
-                    return $q->where(['Client.name LIKE' => '%' . $data['id_client'] . '%']);
-                });
-            }
-
-            if (!empty($data['id_societe'])) {
-                $query->matching('Societe', function ($q) use ($data) {
-                    return $q->where(['Societe.name LIKE' => '%' . $data['id_societe'] . '%']);
-                });
-            }
-            if (!empty($data['id_secteur'])) {
-                $query->matching('Secteur', function ($q) use ($data) {
-                    return $q->where(['Secteur.name LIKE' => '%' . $data['id_secteur'] . '%']);
-                });
-            }
-            if (!empty($data['id_annee'])) {
-                $query->matching('Annee', function ($q) use ($data) {
-                    return $q->where(['Annee.name LIKE' => '%' . $data['id_annee'] . '%']);
-                });
-            }
-            if (!empty($data['id_pays'])) {
-                $query->matching('Pays', function ($q) use ($data) {
-                    return $q->where(['Pays.name LIKE' => '%' . $data['id_pays'] . '%']);
-                });
-            }
-            if (!empty($data['id_type'])) {
-                $query->matching('Type', function ($q) use ($data) {
-                    return $q->where(['Type.name LIKE' => '%' . $data['id_type'] . '%']);
-                });
-            }
+        if (!empty($data['id_client'])) {
+            $query->matching('Client', function ($q) use ($data) {
+                return $q->where(['Client.id_client' => $data['id_client']]);
+            });
         }
 
-        $this->set('reference', $this->paginate($query));
+        if (!empty($data['id_societe'])) {
+            $query->matching('Societe', function ($q) use ($data) {
+                return $q->where(['Societe.id' => $data['id_societe']]);
+            });
+        }
+
+        if (!empty($data['id_secteur'])) {
+            $query->matching('Secteur', function ($q) use ($data) {
+                return $q->where(['Secteur.id_secteur' => $data['id_secteur']]);
+            });
+        }
+
+        if (!empty($data['id_annee'])) {
+            $query->matching('Annee', function ($q) use ($data) {
+                return $q->where(['Annee.id_annee' => $data['id_annee']]);
+            });
+        }
+
+        if (!empty($data['id_pays'])) {
+            $query->matching('Pays', function ($q) use ($data) {
+                return $q->where(['Pays.id_pays' => $data['id_pays']]);
+            });
+        }
+
+        if (!empty($data['id_type'])) {
+            $query->matching('Type', function ($q) use ($data) {
+                return $q->where(['Type.id_type' => $data['id_type']]);
+            });
+        }
     }
-    
-    
+
+    $client = $this->Reference->Client->find('list', ['limit' => 200]);
+    $societe = $this->Reference->Societe->find('list', ['limit' => 200]);
+    $secteur = $this->Reference->Secteur->find('list', ['limit' => 200]);
+    $annee = $this->Reference->Annee->find('list', ['limit' => 200]);
+    $pays = $this->Reference->Pays->find('list', ['limit' => 200]);
+    $type = $this->Reference->Type->find('list', ['limit' => 200]);
+
+    $reference = $this->paginate($query);
+    $hasData = !empty($reference);
+    $this->set(compact('reference', 'client', 'societe', 'secteur', 'annee', 'pays', 'type'));
+}
+
+public function print()
+{
+    $this->request->allowMethod(['post']);
+
+    $data = $this->request->getData('reference');
+
+    if (empty($data)) {
+        $this->Flash->error(__('No data to print.'));
+        return $this->redirect(['action' => 'search']);
+    }
+
+    $reference = json_decode($data);
+
+    $this->set('reference', $reference);
+
+    $this->viewBuilder()
+        ->enableAutoLayout(false)
+        ->setClassName('CakePdf.Pdf')
+        ->setOptions([
+            'orientation' => 'portrait',
+            'pageSize' => 'A4'
+        ]);
+
+    $this->render('print');
+}
+
+
 
 
 }

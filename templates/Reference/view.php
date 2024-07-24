@@ -51,6 +51,10 @@
                 <th><?= __('Type') ?></th>
                 <td><?= $reference->has('type') ? $this->Html->link($reference->type->name, ['controller' => 'Type', 'action' => 'view', $reference->type->id]) : '' ?></td>
             </tr>
+            <tr>
+                <th><?= __('Link') ?></th>
+                <td><?= h($reference->link) ?></td>
+            </tr>
         </table>
     </div>
     </div>

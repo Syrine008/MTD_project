@@ -30,6 +30,8 @@
                     echo $this->Form->control('id_annee', ['label' => 'Annee', 'options' => $annee]);
                     echo $this->Form->control('id_pays', ['label' => 'Pays', 'options' => $pays]);
                     echo $this->Form->control('id_type', ['label' => 'Type', 'options' => $type]);
+                    echo $this->Form->control('link');
+
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

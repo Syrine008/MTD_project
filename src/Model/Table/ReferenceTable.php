@@ -129,6 +129,12 @@ class ReferenceTable extends Table
             'rule' => [ 'fileSize', '<=', '5MB' ],
             'message' => 'Image file size must be less than 5MB.',
         ]]);
+
+        $validator
+        ->scalar('link')
+            ->maxLength('link', 255)
+            ->requirePresence('link', 'create')
+            ->notEmptyString('link');
         return $validator;
     } 
 

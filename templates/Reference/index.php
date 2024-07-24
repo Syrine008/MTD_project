@@ -63,6 +63,7 @@
                         <th><?= $this->Paginator->sort('id_annee', 'Year') ?></th>
                         <th><?= $this->Paginator->sort('id_pays', 'Country') ?></th>
                         <th><?= $this->Paginator->sort('id_type', 'Type') ?></th>
+                        <th><?= $this->Paginator->sort('link') ?></th>
                         <th class="actions"><?= __('Actions') ?></th>
                     </tr>
                 </thead>
@@ -79,6 +80,7 @@
                         <td><?= $reference->has('annee') ? $this->Html->link($reference->annee->name, ['controller' => 'Annee', 'action' => 'view', $reference->annee->id]) : '' ?></td>
                         <td><?= $reference->pay['name'] ?></td>
                         <td><?= $reference->has('type') ? $this->Html->link($reference->type->name, ['controller' => 'Type', 'action' => 'view', $reference->type->id]) : '' ?></td>
+                        <td><?= h($reference->link) ?></td>
                         <td class="actions">
                             <?= $this->Html->link('<i class="fas fa-eye" style="color:#005eff;"></i> ', ['action' => 'view', $reference->id], ['escape' => false, 'class' => 'view-icon']) ?>
                             <?= $this->Html->link('<i class="fas fa-edit"style="color:#FFD43B;"></i> ', ['action' => 'edit', $reference->id], ['escape' => false, 'class' => 'edit-icon']) ?>

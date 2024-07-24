@@ -46,6 +46,8 @@ use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
 use Cake\Core\Plugin; // Add this line to import the Plugin class
+use Cake\View\View;
+use Cake\Pdf\PdfConfig;
 
 /**
  * Load global functions.
@@ -230,4 +232,25 @@ ServerRequest::addDetector('tablet', function ($request) {
 // and https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax
 //\Cake\I18n\FrozenDate::setToStringFormat('dd.MM.yyyy');
 //\Cake\I18n\FrozenTime::setToStringFormat('dd.MM.yyyy HH:mm');
+require ROOT . DS . 'vendor' . DS . 'autoload.php';
+
+Configure::write('CakePdf', [
+    'engine' => 'CakePdf.WkHtmlToPdf',
+    'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe',
+    'options' => [
+        'print-media-type' => false,
+        'outline' => true,
+        'images' => true,
+        'dpi' => 96
+    ],
+    'margin' => [
+        'bottom' => 15,
+        'top' => 15,
+        'right' => 15,
+        'left' => 15
+    ],
+    'download' => true
+]);
+
+
 
