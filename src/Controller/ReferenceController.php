@@ -21,6 +21,8 @@ class ReferenceController extends AppController
 
     public function index()
     {
+
+
          $query = $this->Reference->find()
         ->contain(['Client', 'Societe', 'Secteur', 'Annee', 'Pays', 'Type']);
     
