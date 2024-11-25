@@ -14,7 +14,7 @@
         "dompdf/dompdf": "^3.0",
         "friendsofcake/cakepdf": "^5.0",
         "mobiledetect/mobiledetectlib": "^3.74",
-        "mpdf/mpdf": "^6.1"
+        "mpdf/mpdf": "^8.2"
     },
     "require-dev": {
         "cakephp/bake": "^3.0.0",
